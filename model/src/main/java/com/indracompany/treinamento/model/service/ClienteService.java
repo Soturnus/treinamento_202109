@@ -34,6 +34,22 @@ public class ClienteService extends GenericCrudService<Cliente, Long, ClienteRep
 		return retorno;
 	}
 	
+	public ClienteDTO buscarClientePorNome(String nome) {
+		
+		Cliente cli = repository.findByNome(nome);
+		
+		if (cli == null) {
+			throw new AplicacaoException(ExceptionValidacoes.ALERTA_NENHUM_REGISTRO_ENCONTRADO);
+		}
+		
+		ClienteDTO retorno = new ClienteDTO();
+		retorno.setNome(cli.getNome());
+		retorno.setCpf(cli.getCpf());
+		retorno.setId(cli.getId());
+		
+		return retorno;
+	}
+	
 	private boolean cpfEhValido(String cpf) {
 		return CpfUtil.validaCPF(cpf);
 	}

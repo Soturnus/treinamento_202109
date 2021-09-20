@@ -37,5 +37,38 @@ public class ClienteService extends GenericCrudService<Cliente, Long, ClienteRep
 	private boolean cpfEhValido(String cpf) {
 		return CpfUtil.validaCPF(cpf);
 	}
+
+	public ClienteDTO buscarClientePorNome(String nome) {
+		
+		boolean nomeIsValid = this.nomeIsValid(nome);
+		
+		if (!nomeIsValid) {
+			throw new AplicacaoException(ExceptionValidacoes.ERRO_VALIDACAO);
+		}
+		
+		Cliente cli = repository.findByNome(nome);
+		
+		if (cli == null) {
+			throw new AplicacaoException(ExceptionValidacoes.ALERTA_NENHUM_REGISTRO_ENCONTRADO);
+		}
+		
+		ClienteDTO ret = new ClienteDTO();
+		ret.setCpf(cli.getCpf());
+		ret.setNome(cli.getNome());
+		ret.setId(cli.getId());
+		
+		return ret;
+	}
+	
+	private boolean nomeIsValid(String name) {
+		boolean IsOrNotValid;
+		if(name == null) {
+			IsOrNotValid = false; 
+		}
+		else {
+			IsOrNotValid = true; 
+		}		
+		return IsOrNotValid;
+	}
 	  
 }
